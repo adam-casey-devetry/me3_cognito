@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import FormErrors from "../FormErrors";
 import Validate from "../utility/FormValidation";
+import { Auth } from "aws-amplify";
 
 class LogIn extends Component {
   state = {
@@ -34,6 +35,21 @@ class LogIn extends Component {
     }
 
     // AWS Cognito integration here
+    try {
+      const user = await Auth.signIn(this.state.username, this.state.password);
+      console.log(user);
+      // Redirect to home page
+      this.props.history.push("/");
+    } catch (error) {
+      let err = null;
+      !error.message ? (err = { message: error }) : (err = error);
+      this.setState({
+        errors: {
+          ...this.state.errors,
+          cognito: err
+        }
+      });
+    }
   };
 
   onInputChange = event => {
@@ -53,8 +69,8 @@ class LogIn extends Component {
           <form onSubmit={this.handleSubmit}>
             <div className="field">
               <p className="control">
-                <input 
-                  className="input" 
+                <input
+                  className="input"
                   type="text"
                   id="username"
                   aria-describedby="usernameHelp"
@@ -66,8 +82,8 @@ class LogIn extends Component {
             </div>
             <div className="field">
               <p className="control has-icons-left">
-                <input 
-                  className="input" 
+                <input
+                  className="input"
                   type="password"
                   id="password"
                   placeholder="Password"
@@ -86,9 +102,7 @@ class LogIn extends Component {
             </div>
             <div className="field">
               <p className="control">
-                <button className="button is-success">
-                  Login
-                </button>
+                <button className="button is-success">Login</button>
               </p>
             </div>
           </form>

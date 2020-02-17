@@ -1,6 +1,6 @@
-## Hexal Energy app
+## Me3 Testing app
 
-This is a starter ReactJS UI for my 'Create a Serverless App' tutorial series.
+This is a starter ReactJS UI using the ['Create a Serverless App'](https://www.youtube.com/watch?v=2SaO1Pvah2k) tutorial series.
 
 ## Application Info
 

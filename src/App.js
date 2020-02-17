@@ -33,11 +33,18 @@ class App extends Component {
   };
 
   render() {
+    const authProps = {
+      isAuthenticated: this.state.isAuthenticated,
+      user: this.state.user,
+      setAuthStatus: this.setAuthStatus,
+      setUser: this.setUser
+    };
+    // Use special render syntax to pass properties to each component
     return (
       <div className="App">
         <Router>
           <div>
-            <Navbar />
+            <Navbar auth={authProps} />
             <Switch>
               <Route exact path="/" component={Home} />
               <Route exact path="/products" component={Products} />

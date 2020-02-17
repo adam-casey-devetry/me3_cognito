@@ -38,6 +38,8 @@ class LogIn extends Component {
     try {
       const user = await Auth.signIn(this.state.username, this.state.password);
       console.log(user);
+      this.props.auth.setAuthStatus(true);
+      this.props.auth.setUser(user);
       // Redirect to home page
       this.props.history.push("/");
     } catch (error) {

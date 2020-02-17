@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 
 export default class Navbar extends Component {
   render() {
@@ -6,7 +6,12 @@ export default class Navbar extends Component {
       <nav className="navbar" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
           <a className="navbar-item" href="/">
-            <img src="hexal-logo.png" width="112" height="28" alt="hexal logo" />
+            <img
+              src="hexal-logo.png"
+              width="112"
+              height="28"
+              alt="hexal logo"
+            />
           </a>
         </div>
 
@@ -25,6 +30,9 @@ export default class Navbar extends Component {
 
           <div className="navbar-end">
             <div className="navbar-item">
+              {this.props.auth.isAuthenticated && this.props.auth.user && (
+                <p>Username: {this.props.auth.user.username}</p>
+              )}
               <div className="buttons">
                 <a href="/register" className="button is-primary">
                   <strong>Register</strong>
@@ -37,6 +45,6 @@ export default class Navbar extends Component {
           </div>
         </div>
       </nav>
-    )
+    );
   }
 }

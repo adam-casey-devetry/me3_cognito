@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import FormErrors from "../FormErrors";
 import Validate from "../utility/FormValidation";
 
@@ -71,8 +71,8 @@ class ForgotPasswordVerification extends Component {
             </div>
             <div className="field">
               <p className="control has-icons-left">
-                <input 
-                  className="input" 
+                <input
+                  className="input"
                   type="email"
                   id="email"
                   aria-describedby="emailHelp"
@@ -102,9 +102,7 @@ class ForgotPasswordVerification extends Component {
             </div>
             <div className="field">
               <p className="control">
-                <button className="button is-success">
-                  Login
-                </button>
+                <button className="button is-success">Submit</button>
               </p>
             </div>
           </form>

@@ -5,6 +5,10 @@
   "cognito": {
     "REGION": "us-east-2",
     "USER_POOL_ID": "us-east-2_U42nLRyVn",
-    "APP_CLIENT_ID": "243lj3pf7dj2ubd9idsoqss1m1"
+    "APP_CLIENT_ID": "243lj3pf7dj2ubd9idsoqss1m1",
+    "IDENTITY_POOL_ID": "us-east-2:a62b5357-7608-4bc8-9671-748194c3e329"
+  },
+  "social": {
+    "FB": "484177372522431"
   }
 }

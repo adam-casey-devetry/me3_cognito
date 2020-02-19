@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Amplify, { Auth } from "aws-amplify";
+import { Auth } from "aws-amplify";
 
 // Wait for the Facebook JS SDK to load
 // Once loaded, enable the Login With Facebook button
@@ -17,15 +17,6 @@ function waitForInit() {
   });
 }
 
-Amplify.configure({
-  Auth: {
-    domain: "me3.auth.us-east-2.amazoncognito.com/",
-    redirectSignIn: "https://localhost:3000/",
-    redirectSignOut: "https://localhost:3000/",
-    responsetype: "token"
-  }
-});
-
 export default class FacebookButton extends Component {
   constructor(props) {
     super(props);
@@ -42,6 +33,7 @@ export default class FacebookButton extends Component {
   }
 
   statusChangeCallback = response => {
+    console.log("satusChangeCallback");
     if (response.status === "connected") {
       this.handleResponse(response.authResponse);
     } else {
@@ -60,6 +52,7 @@ export default class FacebookButton extends Component {
   };
 
   handleError(error) {
+    console.log(error);
     alert(error);
   }
 
@@ -70,6 +63,7 @@ export default class FacebookButton extends Component {
     this.setState({ isLoading: true });
 
     try {
+      console.log("Calling FB");
       const response = await Auth.federatedSignIn(
         "Facebook",
         { token, expires_at },

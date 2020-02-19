@@ -1,20 +1,30 @@
 import React, { Component } from "react";
-import { Auth } from "aws-amplify";
+import Amplify, { Auth } from "aws-amplify";
 
 // Wait for the Facebook JS SDK to load
 // Once loaded, enable the Login With Facebook button
 function waitForInit() {
+  console.log("SDK Loaded");
   return new Promise((res, rej) => {
     const hasFbLoaded = () => {
       if (window.FB) {
         res();
       } else {
-        setTimeout(hasFbLoaded, 300);
+        setTimeout(hasFbLoaded, 100);
       }
     };
     hasFbLoaded();
   });
 }
+
+Amplify.configure({
+  Auth: {
+    domain: "me3.auth.us-east-2.amazoncognito.com/",
+    redirectSignIn: "https://localhost:3000/",
+    redirectSignOut: "https://localhost:3000/",
+    responsetype: "token"
+  }
+});
 
 export default class FacebookButton extends Component {
   constructor(props) {
@@ -26,6 +36,7 @@ export default class FacebookButton extends Component {
   }
 
   async componentDidMount() {
+    console.log("mounted");
     await waitForInit();
     this.setState({ isLoading: false });
   }
@@ -39,11 +50,13 @@ export default class FacebookButton extends Component {
   };
 
   checkLoginState = () => {
+    console.log("Checking login state");
     window.FB.getLoginStatus(this.statusChangeCallback);
   };
 
   handleClick = () => {
-    window.FB.login(this.checkLoginState, { scope: "public_profile,email" });
+    console.log("test");
+    window.FB.login(this.checkLoginState, { scope: "public_profile, email" });
   };
 
   handleError(error) {
@@ -54,12 +67,11 @@ export default class FacebookButton extends Component {
     const { email, accessToken: token, expiresIn } = data;
     const expires_at = expiresIn * 1000 + new Date().getTime();
     const user = { email };
-
     this.setState({ isLoading: true });
 
     try {
       const response = await Auth.federatedSignIn(
-        "facebook",
+        "Facebook",
         { token, expires_at },
         user
       );

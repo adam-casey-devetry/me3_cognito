@@ -13,11 +13,20 @@ import ChangePassword from "./components/auth/ChangePassword";
 import ChangePasswordConfirm from "./components/auth/ChangePasswordConfirm";
 import Welcome from "./components/auth/Welcome";
 import Footer from "./components/Footer";
-import { Auth } from "aws-amplify";
+import Amplify, { Auth } from "aws-amplify";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import config from "./config";
 library.add(faEdit);
+
+Amplify.configure({
+  Auth: {
+    domain: "me3.auth.us-east-2.amazoncognito.com/",
+    redirectSignIn: "http://localhost:3000/",
+    redirectSignOut: "http://localhost:3000/",
+    responsetype: "token"
+  }
+});
 
 class App extends Component {
   state = {
@@ -60,7 +69,7 @@ class App extends Component {
         appId: config.social.FB,
         autoLogAppEvents: true,
         xfbml: true,
-        version: "v3.1"
+        version: "v6.0"
       });
     };
 

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import FormErrors from "../FormErrors";
 import Validate from "../utility/FormValidation";
+import FacebookButton from "../FacebookButton";
 import { Auth } from "aws-amplify";
 
 class LogIn extends Component {
@@ -20,6 +21,10 @@ class LogIn extends Component {
         blankfield: false
       }
     });
+  };
+
+  handleFbLogin = () => {
+    this.props.userHasAuthenticated(true);
   };
 
   handleSubmit = async event => {
@@ -69,6 +74,8 @@ class LogIn extends Component {
           <FormErrors formerrors={this.state.errors} />
 
           <form onSubmit={this.handleSubmit}>
+            <FacebookButton onLogin={this.handleFbLogin} />
+            <hr />
             <div className="field">
               <p className="control">
                 <input

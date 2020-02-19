@@ -16,6 +16,7 @@ import Footer from "./components/Footer";
 import { Auth } from "aws-amplify";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import config from "./config";
 library.add(faEdit);
 
 class App extends Component {
@@ -35,12 +36,15 @@ class App extends Component {
   };
 
   async componentDidMount() {
+    this.loadFacebookSDK();
+
     try {
       // Retrieve session object from local storage
       const session = await Auth.currentSession();
       // Set isAuthenticated flag
       this.setAuthStatus(true);
       console.log(session);
+      // Load the current authenticated used
       const user = await Auth.currentAuthenticatedUser();
       // Set the user in state
       this.setUser(user);
@@ -48,6 +52,29 @@ class App extends Component {
       console.log(error);
     }
     this.setState({ isAuthenticating: false });
+  }
+
+  loadFacebookSDK() {
+    window.fbAsyncInit = function() {
+      window.FB.init({
+        appId: config.social.FB,
+        autoLogAppEvents: true,
+        xfbml: true,
+        version: "v3.1"
+      });
+    };
+
+    (function(d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, "script", "facebook-jssdk");
   }
 
   render() {

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Auth } from "aws-amplify";
-// eslint-disable-next-line
 import config from "../config";
 
 /* Amplify.configure({
@@ -107,9 +106,26 @@ export default class FacebookButton extends Component {
         { token: accessToken, expires_at },
         user
       ).then(credentials => {
+        console.log("User 2: " + user.name);
         console.log(credentials);
       });
     });
+  }
+
+  fbAsyncInit() {
+    // init the fb sdk client
+    const fb = window.FB;
+    fb.init({
+      appId: config.social.FB,
+      cookie: true,
+      xfbml: true,
+      version: "v2.11"
+    });
+  }
+
+  initFB() {
+    const fb = window.FB;
+    console.log("FB SDK inited");
   }
 
   createScript() {
@@ -119,6 +135,7 @@ export default class FacebookButton extends Component {
     script.src = "https://connect.facebook.net/en_US/sdk.js";
     script.async = true;
     script.onload = this.initFB;
+    //script.onload = this.waitForInit;
     document.body.appendChild(script);
   }
 

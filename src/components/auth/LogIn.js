@@ -72,11 +72,11 @@ class LogIn extends Component {
       <section className="section auth">
         <div className="container">
           <h1>Log in</h1>
+          <hr />
+          <FacebookButton onLogin={this.handleFbLogin} />
+          <hr />
           <FormErrors formerrors={this.state.errors} />
-
           <form onSubmit={this.handleSubmit}>
-            <FacebookButton onLogin={this.handleFbLogin} />
-            <hr />
             <div className="field">
               <p className="control">
                 <input

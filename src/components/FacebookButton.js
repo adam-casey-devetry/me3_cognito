@@ -4,11 +4,11 @@ import { Auth } from "aws-amplify";
 // Wait for the Facebook JS SDK to load
 // Once loaded, enable the Login With Facebook button
 function waitForInit() {
-  console.log("SDK Loaded");
   return new Promise((res, rej) => {
     const hasFbLoaded = () => {
       if (window.FB) {
         res();
+        console.log("SDK Loaded");
       } else {
         setTimeout(hasFbLoaded, 100);
       }
@@ -27,7 +27,7 @@ export default class FacebookButton extends Component {
   }
 
   async componentDidMount() {
-    console.log("mounted");
+    console.log("Mounted");
     await waitForInit();
     this.setState({ isLoading: false });
   }
@@ -47,7 +47,7 @@ export default class FacebookButton extends Component {
   };
 
   handleClick = () => {
-    console.log("test");
+    console.log("Login to FB attempt");
     window.FB.login(this.checkLoginState, { scope: "public_profile, email" });
   };
 
@@ -80,16 +80,19 @@ export default class FacebookButton extends Component {
   render() {
     return (
       <div>
-        <div
-          className="fb-login-button"
-          data-width=""
-          data-size="large"
-          data-button-type="continue_with"
-          data-auto-logout-link="false"
-          data-use-continue-as="false"
-          onClick={this.handleClick}
-          disabled={this.state.isLoading}
-        ></div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-toggle="button"
+            aria-pressed="false"
+            autocomplete="off"
+            onClick={this.handleClick}
+            disabled={this.state.isLoading}
+          >
+            Login With Facebook
+          </button>
+        </div>
       </div>
     );
   }

@@ -1,34 +1,11 @@
 import React, { Component } from "react";
-import Amplify, { Auth } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import config from "../config";
-
-Amplify.configure({
-  Auth: {
-    // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
-    identityPoolId: config.cognito.IDENTITY_POOL_ID
-  }
-});
-
-// Wait for the Facebook JS SDK to load
-// Once loaded, enable the Login With Facebook button
-function waitForInit() {
-  return new Promise((res, rej) => {
-    const hasFbLoaded = () => {
-      if (window.FB) {
-        res();
-        console.log("SDK Loaded");
-      } else {
-        setTimeout(hasFbLoaded, 100);
-      }
-    };
-    hasFbLoaded();
-  });
-}
 
 export default class FacebookButton extends Component {
   constructor(props) {
     super(props);
-    this.signIn = this.signIn.bind(this);
+    this.signIn = this.signIn;
     this.state = {
       isLoading: true
     };
@@ -36,12 +13,11 @@ export default class FacebookButton extends Component {
 
   async componentDidMount() {
     console.log("FB button is mounted");
-    await waitForInit();
     this.createScript();
     this.setState({ isLoading: false });
   }
 
-  signIn() {
+  signIn = () => {
     const fb = window.FB;
     fb.getLoginStatus(response => {
       if (response.status === "connected") {
@@ -61,7 +37,7 @@ export default class FacebookButton extends Component {
         );
       }
     });
-  }
+  };
 
   getAWSCredentials(response) {
     console.log("Get AWS credentials response: " + response);
@@ -79,7 +55,7 @@ export default class FacebookButton extends Component {
           name: response.name,
           email: response.email
         };
-        console.log("response.name: " + response.name);
+        // This is the access token that FB returns
         console.log("Access Token: " + accessToken);
         Auth.federatedSignIn(
           "facebook",
@@ -126,33 +102,6 @@ export default class FacebookButton extends Component {
   handleError(error) {
     console.log("Error encountered: " + error);
     alert(error);
-  }
-
-  async handleResponse(data) {
-    const { email, accessToken: token, expiresIn } = data;
-    console.log("accessToken: " + token);
-    const expires_at = expiresIn * 1000 + new Date().getTime();
-    const user = { email };
-    console.log("User: " + user);
-    this.setState({ isLoading: true });
-
-    try {
-      console.log("Calling FB");
-      const response = await Auth.federatedSignIn(
-        "facebook",
-        { token, expires_at },
-        user
-      );
-      console.log(
-        "After federatedSignIn attempt: " + JSON.stringify(response, null, 2)
-      );
-      this.setState({ isLoading: false });
-      this.props.onLogin(response);
-    } catch (e) {
-      console.log("Federated Signin attempt failed");
-      this.setState({ isLoading: false });
-      this.handleError(e);
-    }
   }
 
   render() {

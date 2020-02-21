@@ -25,7 +25,8 @@ class LogIn extends Component {
 
   handleFbLogin = () => {
     console.log("User test");
-    //this.props.userHasAuthenticated(true);
+    this.props.auth.setAuthStatus(true);
+    this.props.history.push("/");
   };
 
   handleSubmit = async event => {

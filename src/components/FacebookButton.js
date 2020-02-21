@@ -17,6 +17,7 @@ export default class FacebookButton extends Component {
     this.setState({ isLoading: false });
   }
 
+  // #1
   signIn = () => {
     const fb = window.FB;
     fb.getLoginStatus(response => {
@@ -39,6 +40,7 @@ export default class FacebookButton extends Component {
     });
   };
 
+  // #2
   getAWSCredentials(response) {
     console.log("Get AWS credentials response: " + response);
     const { accessToken, expiresIn } = response;
@@ -67,6 +69,7 @@ export default class FacebookButton extends Component {
           console.log(credentials);
         });
       });
+      this.props.onLogin();
     } catch (error) {
       console.log(error);
     }

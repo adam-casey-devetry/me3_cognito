@@ -35,34 +35,11 @@ export default class FacebookButton extends Component {
   }
 
   async componentDidMount() {
-    console.log("FB button is mkounted");
+    console.log("FB button is mounted");
     await waitForInit();
     this.createScript();
     this.setState({ isLoading: false });
   }
-
-  // #1
-  handleClick = () => {
-    console.log("Login to FB attempt");
-    window.FB.login(this.checkLoginState, { scope: "public_profile, email" });
-  };
-
-  // #2
-  checkLoginState = () => {
-    console.log("Checking login state");
-    window.FB.getLoginStatus(this.statusChangeCallback);
-  };
-
-  // #3
-  statusChangeCallback = response => {
-    if (response.status === "connected") {
-      console.log("You are connected");
-      this.handleResponse(response.authResponse);
-    } else {
-      console.log("You're not connected!");
-      this.handleError(response);
-    }
-  };
 
   signIn() {
     const fb = window.FB;
@@ -78,7 +55,7 @@ export default class FacebookButton extends Component {
             this.getAWSCredentials(response.authResponse);
           },
           {
-            // the authorized scopes
+            // The authorized scopes
             scope: "public_profile,email"
           }
         );
@@ -96,25 +73,31 @@ export default class FacebookButton extends Component {
     }
 
     const fb = window.FB;
-    fb.api("/me", { fields: "name,email" }, response => {
-      const user = {
-        name: response.name,
-        email: response.email
-      };
-
-      Auth.federatedSignIn(
-        "facebook",
-        { token: accessToken, expires_at },
-        user
-      ).then(credentials => {
-        console.log("User 2: " + user.name);
-        console.log(credentials);
+    try {
+      fb.api("/me", { fields: "name,email" }, response => {
+        const user = {
+          name: response.name,
+          email: response.email
+        };
+        console.log("response.name: " + response.name);
+        console.log("Access Token: " + accessToken);
+        Auth.federatedSignIn(
+          "facebook",
+          { token: accessToken, expires_at },
+          user
+        ).then(credentials => {
+          console.log("User Name: " + user.name);
+          console.log("User Email: " + user.email);
+          console.log(credentials);
+        });
       });
-    });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   fbAsyncInit() {
-    // init the fb sdk client
+    // Init the fb sdk client
     const fb = window.FB;
     fb.init({
       appId: config.social.FB,
@@ -124,19 +107,13 @@ export default class FacebookButton extends Component {
     });
   }
 
-  initFB() {
-    const fb = window.FB;
-    console.log("FB SDK inited");
-  }
-
   createScript() {
-    // load the sdk
+    // Load the sdk
     window.fbAsyncInit = this.fbAsyncInit;
     const script = document.createElement("script");
     script.src = "https://connect.facebook.net/en_US/sdk.js";
     script.async = true;
-    script.onload = this.initFB;
-    //script.onload = this.waitForInit;
+    //script.onload = this.initFB;
     document.body.appendChild(script);
   }
 

@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import { Auth } from "aws-amplify";
+import Amplify, { Auth } from "aws-amplify";
 import config from "../config";
 
-/* Amplify.configure({
+Amplify.configure({
   Auth: {
     // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
-    identityPoolId: config.cogntio.IDENTITY_POOL_ID
+    identityPoolId: config.cognito.IDENTITY_POOL_ID
   }
 });
- */
+
 // Wait for the Facebook JS SDK to load
 // Once loaded, enable the Login With Facebook button
 function waitForInit() {
@@ -35,7 +35,7 @@ export default class FacebookButton extends Component {
   }
 
   async componentDidMount() {
-    console.log("Mounted");
+    console.log("FB button is mkounted");
     await waitForInit();
     this.createScript();
     this.setState({ isLoading: false });
@@ -87,6 +87,7 @@ export default class FacebookButton extends Component {
   }
 
   getAWSCredentials(response) {
+    console.log("Get AWS credentials response: " + response);
     const { accessToken, expiresIn } = response;
     const date = new Date();
     const expires_at = expiresIn * 1000 + date.getTime();
@@ -119,7 +120,7 @@ export default class FacebookButton extends Component {
       appId: config.social.FB,
       cookie: true,
       xfbml: true,
-      version: "v2.11"
+      version: "v6.0"
     });
   }
 
@@ -155,10 +156,11 @@ export default class FacebookButton extends Component {
     try {
       console.log("Calling FB");
       const response = await Auth.federatedSignIn(
-        "Facebook",
+        "facebook",
         { token, expires_at },
         user
       );
+      console.log("After federatedSignIn attempt: " + response);
       this.setState({ isLoading: false });
       this.props.onLogin(response);
     } catch (e) {
@@ -178,7 +180,7 @@ export default class FacebookButton extends Component {
             data-toggle="button"
             aria-pressed="false"
             autoComplete="off"
-            onClick={this.signIn}
+            onClick={this.handleClick}
             disabled={this.state.isLoading}
           >
             Login With Facebook

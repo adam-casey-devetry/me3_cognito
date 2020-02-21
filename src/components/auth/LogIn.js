@@ -24,7 +24,6 @@ class LogIn extends Component {
   };
 
   handleFbLogin = () => {
-    console.log("User test");
     this.props.auth.setAuthStatus(true);
     this.props.history.push("/");
   };

@@ -35,7 +35,7 @@ export default class FacebookButton extends Component {
   }
 
   async componentDidMount() {
-    console.log("FB button is mkounted");
+    console.log("FB button is mounted");
     await waitForInit();
     this.createScript();
     this.setState({ isLoading: false });
@@ -125,6 +125,7 @@ export default class FacebookButton extends Component {
   }
 
   initFB() {
+    // eslint-disable-next-line
     const fb = window.FB;
     console.log("FB SDK inited");
   }
@@ -160,7 +161,9 @@ export default class FacebookButton extends Component {
         { token, expires_at },
         user
       );
-      console.log("After federatedSignIn attempt: " + response);
+      console.log(
+        "After federatedSignIn attempt: " + JSON.stringify(response, null, 2)
+      );
       this.setState({ isLoading: false });
       this.props.onLogin(response);
     } catch (e) {
@@ -180,7 +183,7 @@ export default class FacebookButton extends Component {
             data-toggle="button"
             aria-pressed="false"
             autoComplete="off"
-            onClick={this.handleClick}
+            onClick={this.signIn}
             disabled={this.state.isLoading}
           >
             Login With Facebook

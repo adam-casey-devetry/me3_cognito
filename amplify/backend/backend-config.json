@@ -1,0 +1,9 @@
+{
+    "auth": {
+        "me3cognito3500d270": {
+            "service": "Cognito",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": []
+        }
+    }
+}

@@ -14,14 +14,8 @@ amplify/backend/awscloudformation
 build/
 dist/
 node_modules/
-#aws-exports.js
+aws-exports.js
 awsconfiguration.json
 amplifyconfiguration.json
 amplify-gradle-config.json
 amplifyxc.config
-
-https://example.com/?SuperSocializerAuth=Facebook
-
-http://me3cogauth-20200224111143-hostingbucket-local.s3-website.us-east-2.amazonaws.com/login
-
-https://me3cogauth-20200224111143-hostingbucket-local.s3-website.us-east-2.amazonaws.com/l/?SuperSocializerAuth=Facebook

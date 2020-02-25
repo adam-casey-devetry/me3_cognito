@@ -54,8 +54,11 @@ export default class FacebookButton extends Component {
             if (!response || !response.authResponse) {
               return;
             }
+            console.log(
+              "response.authResponse: " +
+                JSON.stringify(response.authResponse, null, 2)
+            );
             this.getAWSCredentials(response.authResponse);
-            //console.log("response.authResponse: " + JSON.stringify(response.authResponse));
           },
           {
             // The authorized scopes
@@ -77,18 +80,6 @@ export default class FacebookButton extends Component {
       return;
     }
 
-    Auth.currentAuthenticatedUser()
-      .then(user => {
-        console.log(
-          "Current authenticated user: " + JSON.stringify(user),
-          null,
-          2
-        );
-      })
-      .catch(e => {
-        console.log("Not authenticated");
-      });
-
     const fb = window.FB;
     try {
       fb.api("/me", { fields: "name,email" }, response => {
@@ -97,26 +88,25 @@ export default class FacebookButton extends Component {
           email: response.email
         };
         console.log("Auth.federatedSignIn attempt");
-        const test = () =>
+        try {
           Auth.federatedSignIn(
-            { provider: "Facebook" }
-            /*           "facebook",
-          { token: accessToken, expires_at },
-          user */
+            "facebook",
+            { token: accessToken, expires_at },
+            user
           ).then(credentials => {
             console.log("User Name: " + user.name);
             console.log("User Email: " + user.email);
             console.log(credentials);
           });
+        } catch (error) {
+          console.log("Auth.federateSignIn error: " + error);
+        }
+        console.log("After Auth.federatedSignIn attempt");
       });
       this.props.onLogin();
     } catch (error) {
-      console.log(error);
+      console.log("FB API error: " + error);
     }
-  }
-
-  justAuthFederatedSignin() {
-    Auth.federatedSignIn({ provider: "facebook" });
   }
 
   fbAsyncInit() {

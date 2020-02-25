@@ -4,7 +4,7 @@ node_modules/
 
 # Local storage
 .env
-credentials.csv
+*.csv
 
 #amplify
 amplify/\#current-cloud-backend

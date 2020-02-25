@@ -14,8 +14,12 @@ import ChangePasswordConfirm from "./components/auth/ChangePasswordConfirm";
 import Welcome from "./components/auth/Welcome";
 import Footer from "./components/Footer";
 import Amplify, { Auth } from "aws-amplify";
+//eslint-disable-next-line
+import { withAuthenticator } from "aws-amplify-react";
+import { withOAuth } from "aws-amplify-react";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
+//eslint-disable-next-line
 import config from "./config";
 library.add(faEdit);
 
@@ -45,8 +49,6 @@ class App extends Component {
   };
 
   async componentDidMount() {
-    this.loadFacebookSDK();
-
     try {
       // Retrieve session object from local storage
       const session = await Auth.currentSession();
@@ -61,29 +63,6 @@ class App extends Component {
       console.log(error);
     }
     this.setState({ isAuthenticating: false });
-  }
-
-  loadFacebookSDK() {
-    window.fbAsyncInit = function() {
-      window.FB.init({
-        appId: config.social.FB,
-        autoLogAppEvents: true,
-        xfbml: true,
-        version: "v6.0"
-      });
-    };
-
-    (function(d, s, id) {
-      var js,
-        fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {
-        return;
-      }
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "https://connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    })(document, "script", "facebook-jssdk");
   }
 
   render() {
@@ -170,4 +149,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withOAuth(App);

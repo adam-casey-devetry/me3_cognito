@@ -46,6 +46,7 @@ export default class FacebookButton extends Component {
     const fb = window.FB;
     fb.getLoginStatus(response => {
       if (response.status === "connected") {
+        console.log("You're already connected");
         this.getAWSCredentials(response.authResponse);
       } else {
         fb.login(
@@ -54,6 +55,7 @@ export default class FacebookButton extends Component {
               return;
             }
             this.getAWSCredentials(response.authResponse);
+            //console.log("response.authResponse: " + JSON.stringify(response.authResponse));
           },
           {
             // The authorized scopes
@@ -69,10 +71,23 @@ export default class FacebookButton extends Component {
     console.log("Get AWS credentials response: " + response);
     const { accessToken, expiresIn } = response;
     const date = new Date();
+    // eslint-disable-next-line
     const expires_at = expiresIn * 1000 + date.getTime();
     if (!accessToken) {
       return;
     }
+
+    Auth.currentAuthenticatedUser()
+      .then(user => {
+        console.log(
+          "Current authenticated user: " + JSON.stringify(user),
+          null,
+          2
+        );
+      })
+      .catch(e => {
+        console.log("Not authenticated");
+      });
 
     const fb = window.FB;
     try {
@@ -81,22 +96,27 @@ export default class FacebookButton extends Component {
           name: response.name,
           email: response.email
         };
-        // This is the access token that FB returns
-        console.log("Access Token: " + accessToken);
-        Auth.federatedSignIn(
-          "facebook",
+        console.log("Auth.federatedSignIn attempt");
+        const test = () =>
+          Auth.federatedSignIn(
+            { provider: "Facebook" }
+            /*           "facebook",
           { token: accessToken, expires_at },
-          user
-        ).then(credentials => {
-          console.log("User Name: " + user.name);
-          console.log("User Email: " + user.email);
-          console.log(credentials);
-        });
+          user */
+          ).then(credentials => {
+            console.log("User Name: " + user.name);
+            console.log("User Email: " + user.email);
+            console.log(credentials);
+          });
       });
       this.props.onLogin();
     } catch (error) {
       console.log(error);
     }
+  }
+
+  justAuthFederatedSignin() {
+    Auth.federatedSignIn({ provider: "facebook" });
   }
 
   fbAsyncInit() {

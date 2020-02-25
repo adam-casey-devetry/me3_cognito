@@ -93,11 +93,13 @@ export default class FacebookButton extends Component {
             "facebook",
             { token: accessToken, expires_at },
             user
-          ).then(credentials => {
-            console.log("User Name: " + user.name);
-            console.log("User Email: " + user.email);
-            console.log(credentials);
-          });
+          )
+            .then(credentials => {
+              console.log("User Name: " + user.name);
+              console.log("User Email: " + user.email);
+              console.log(credentials);
+            })
+            .catch(error => alert(error.message));
         } catch (error) {
           console.log("Auth.federateSignIn error: " + error);
         }

@@ -16,6 +16,7 @@ import Footer from "./components/Footer";
 import Amplify, { Auth } from "aws-amplify";
 //eslint-disable-next-line
 import { withAuthenticator } from "aws-amplify-react";
+//eslint-disable-next-line
 import { withOAuth } from "aws-amplify-react";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -149,4 +150,5 @@ class App extends Component {
   }
 }
 
-export default withOAuth(App);
+//export default withOAuth(App);
+export default App;

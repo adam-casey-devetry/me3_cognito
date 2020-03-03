@@ -3,6 +3,7 @@ import FormErrors from "../FormErrors";
 import Validate from "../utility/FormValidation";
 import FacebookButton from "../FacebookButton";
 import { Auth } from "aws-amplify";
+
 import { withOAuth } from "aws-amplify-react";
 //eslint-disable-next-line
 import { withAuthenticator } from "aws-amplify-react";
@@ -125,4 +126,5 @@ class LogIn extends Component {
   }
 }
 
+//export default withAuthenticator(LogIn);
 export default withOAuth(LogIn);

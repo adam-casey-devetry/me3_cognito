@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Auth } from "aws-amplify";
 import config from "../config";
 
-export default class FacebookButton extends Component {
+class FacebookButton extends Component {
   constructor(props) {
     super(props);
     this.signIn = this.signIn;
@@ -163,3 +163,5 @@ export default class FacebookButton extends Component {
     );
   }
 }
+FacebookButton.displayName = "FacebookButtonComponent";
+export default FacebookButton;

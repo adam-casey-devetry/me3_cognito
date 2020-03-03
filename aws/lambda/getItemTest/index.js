@@ -11,17 +11,34 @@ exports.handler = async (event, context) => {
     region: "us-east-2"
   });
 
+  let responseBody = "";
+  let statusCode = 0;
+
+  const { id } = event.pathParameters;
+
   // The item we want to pull out of the table
   const params = {
     TableName: "adamTestDBTable",
     Key: {
-      id: "3"
+      id: id
     }
   };
   try {
     const data = await documentClient.get(params).promise();
-    console.log(JSON.stringify(data));
+    // Return a properly formatted response for API Gateway
+    responseBody = JSON.stringify(data.Item);
+    statusCode = 200;
   } catch (err) {
-    console.log(err);
+    responseBody = "Unable to get user data";
+    statusCode = 403;
   }
+
+  const response = {
+    statusCode: statusCode,
+    headers: {
+      myHeader: "test"
+    },
+    body: responseBody
+  };
+  return response;
 };

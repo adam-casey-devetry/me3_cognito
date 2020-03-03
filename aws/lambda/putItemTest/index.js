@@ -14,12 +14,14 @@ exports.handler = async (event, context) => {
   // The item we want to pull out of the table
   const params = {
     TableName: "adamTestDBTable",
-    Key: {
-      id: "3"
+    Item: {
+      id: "4",
+      firstName: "Jane",
+      lastName: "Doe"
     }
   };
   try {
-    const data = await documentClient.get(params).promise();
+    const data = await documentClient.put(params).promise();
     console.log(JSON.stringify(data));
   } catch (err) {
     console.log(err);

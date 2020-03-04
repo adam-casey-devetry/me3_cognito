@@ -32,6 +32,12 @@ class LogIn extends Component {
     this.props.history.push("/");
   };
 
+  getCurrentUser = () => {
+    Auth.currentSession()
+      .then(data => console.log(data))
+      .catch(err => console.log(err));
+  };
+
   handleSubmit = async event => {
     event.preventDefault();
 
@@ -62,6 +68,12 @@ class LogIn extends Component {
         }
       });
     }
+    /*     
+    Use this when you need to get the accesstoken, id token, and other data
+    Auth.currentSession()
+      .then(data => console.log(data))
+      .catch(err => console.log(err)); 
+    */
   };
 
   onInputChange = event => {

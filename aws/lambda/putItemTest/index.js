@@ -8,22 +8,38 @@ AWS.config.update({ region: regionString });
 exports.handler = async (event, context) => {
   const ddb = new AWS.DynamoDB({ apiVersion: regionString });
   const documentClient = new AWS.DynamoDB.DocumentClient({
-    region: "us-east-2"
+    region: regionString
   });
+
+  let responseBody = "";
+  let statusCode = 0;
+
+  const { id, firstName, lastName } = JSON.parse(event.body);
 
   // The item we want to pull out of the table
   const params = {
     TableName: "adamTestDBTable",
     Item: {
-      id: "4",
-      firstName: "Jane",
-      lastName: "Doe"
+      id: id,
+      firstName: firstName,
+      lastName: lastName
     }
   };
   try {
     const data = await documentClient.put(params).promise();
-    console.log(JSON.stringify(data));
+    statusCode = 201;
+    responseBody = JSON.stringify(data);
   } catch (err) {
-    console.log(err);
+    responseBody = "Could not put user data";
+    statusCode = 403;
   }
+
+  const response = {
+    statusCode: statusCode,
+    headers: {
+      myHeader: "Put Test"
+    },
+    body: responseBody
+  };
+  return response;
 };
